@@ -102,23 +102,7 @@ def main():
     parser_build_cwl.add_argument("-u", "--image_url", 
         help="Docker image tag or remote registry URL to be included in the generated CWL files if not using the build_docker and/or push_docker subcommands") 
 
-    parser_build_cwl.add_argument("--monolithic", action="store_true",
-        help="Use the deprecated 'monolithic' approach to generating CWL where stage in and out are bundled inside the application")
-
     parser_build_cwl.set_defaults(func=interface.build_cwl)
-
-    # push_app_registry
-
-    parser_app_registry = subparsers.add_parser('push_app_registry',
-        help=f"Push CWL files to Dockstore application registry")
-
-    parser_app_registry.add_argument("--api_url", dest="dockstore_api_url", required=True,
-        help="Dockstore API URL including the trailing api/ portion of the URL") 
-
-    parser_app_registry.add_argument("--token", dest="dockstore_token", required=True,
-        help="Dockstore API token obtained from the My Services / Account page") 
-
-    parser_app_registry.set_defaults(func=interface.push_app_registry)
 
     # Process arguments
 

@@ -1,3 +1,2 @@
 boto3
 app_pack_generator>=1.1.0
-unity-sds-client>=0.2.0

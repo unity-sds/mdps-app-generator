@@ -95,20 +95,11 @@ def notebook_parameters(state_directory, **kwargs):
 
     return app_gen
 
-def build_cwl(state_directory, cwl_output_path=None, image_url=None, monolithic=False, **kwargs):
+def build_cwl(state_directory, cwl_output_path=None, image_url=None, **kwargs):
     state_dir = check_state_directory(state_directory_path(state_directory))
 
     app_gen = UnityApplicationGenerator(state_dir)
 
-    app_gen.create_cwl(cwl_output_path=cwl_output_path, docker_url=image_url, monolithic=monolithic)
-
-    return app_gen
-
-def push_app_registry(state_directory, dockstore_api_url, dockstore_token, **kwargs):
-    state_dir = check_state_directory(state_directory_path(state_directory))
-
-    app_gen = UnityApplicationGenerator(state_dir)
-
-    app_gen.push_to_application_registry(dockstore_api_url, dockstore_token)
+    app_gen.create_cwl(cwl_output_path=cwl_output_path, docker_url=image_url)
 
     return app_gen
