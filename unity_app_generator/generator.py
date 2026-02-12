@@ -6,11 +6,10 @@ from glob import glob
 
 from .state import ApplicationState
 from .ecr_helper import ECRHelper
+from .ghcr_helper import GHCRHelper
 
 from app_pack_generator import GitManager, DockerUtil, ApplicationNotebook
 from app_pack_generator import ProcessCWL, DataStagingCWL, Descriptor
-
-from unity_sds_client.services.application_service import DockstoreAppCatalog
 
 logger = logging.getLogger(__name__)
 
@@ -79,24 +78,15 @@ class UnityApplicationGenerator(object):
         # Push docker image into ECR
         self.push_to_docker_registry(registry_url)
 
-    def _generate_dockstore_cwl(self, cwl_output_path, target_cwl_filename):
+    def push_to_ghcr(self):
 
-        template = f"""
-cwlVersion: v1.0
+        ghcr_helper = GHCRHelper(self.docker_util)
 
-class: Workflow
-doc: |
-    Required Dockstore CWL file hosted workflows registered by unity_py.
+        # Log in to GHCR via Docker
+        registry_url = ghcr_helper.docker_login()
 
-steps:
-step:
-    run: {target_cwl_filename}
-"""
-        
-        # Hard code file name because it is a hard coded re
-        dockstore_cwl_filename = os.path.join(cwl_output_path, "Dockstore.cwl")
-        with open(dockstore_cwl_filename, "w") as cwl_file:
-            cwl_file.write(template.lstrip())
+        # Push docker image into ECR
+        self.push_to_docker_registry(registry_url)
 
     def create_cwl(self, cwl_output_path=None, docker_url=None, monolithic=False):
 
@@ -128,9 +118,6 @@ step:
         # Create CWL files depending on the mode of production
         cwl_generators = [ ProcessCWL(app) ]
 
-        if monolithic:
-            cwl_generators.append( DataStagingCWL(app) )
-
         files_created = []
         for cwl_gen in cwl_generators:
             files_created += cwl_gen.generate_all(cwl_output_path, dockerurl=docker_url)
@@ -138,12 +125,6 @@ step:
         # Add the JSON descriptor file
         desc = Descriptor(app, self.repo_info)
         files_created.append(desc.generate_descriptor(cwl_output_path, docker_url))
-
-        # Add Dockstore.cwl, point it to the appropriate entry point
-        if monolithic:
-            self._generate_dockstore_cwl(cwl_output_path, "workflow.cwl")
-        else:
-            self._generate_dockstore_cwl(cwl_output_path, "process.cwl")
 
     def notebook_parameters(self):
 
@@ -161,31 +142,3 @@ step:
         for app_info in app_catalog.application_list(for_user=True):
             if app_info.dockstore_info['mode'] and app_info.name == app_name:
                 return app_info
-
-    def push_to_application_registry(self, dockstore_api_url, dockstore_token):
-
-        if self.app_state.cwl_output_path is None or not os.path.exists(self.app_state.cwl_output_path):
-            raise ApplicationGenerationError("Can not register into application registry before CWL generation step")
-
-        app_catalog = DockstoreAppCatalog(dockstore_api_url, dockstore_token) 
-
-        app_name = self.repo_info.name
-        cwl_param_files = glob(os.path.join(self.app_state.cwl_output_path, "*.cwl"))
-        json_param_files = glob(os.path.join(self.app_state.cwl_output_path, "*.json"))
-
-        print(json_param_files)
-
-        if len(cwl_param_files) == 0:
-            raise ApplicationGenerationError("No application package CWL files found")
-
-        if len(json_param_files) == 0:
-            raise ApplicationGenerationError("No JSON parameter file found")
-
-        if (reg_app := self._find_existing_app(app_catalog, app_name)) is not None:
-
-            # Upload updated JSON and CWL files
-            reg_app = app_catalog.upload_files(reg_app, cwl_files=cwl_param_files, json_files=json_param_files)
-
-        else:
-            # Register a new application with the CWL and JSON files
-            reg_app = app_catalog.register(app_name=app_name, cwl_files=cwl_param_files, json_files=json_param_files, publish=True)
