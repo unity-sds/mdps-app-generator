@@ -75,6 +75,15 @@ def push_ecr(state_directory, **kwargs):
 
     return app_gen
 
+def push_ghcr(state_directory, **kwargs):
+    state_dir = check_state_directory(state_directory_path(state_directory))
+
+    app_gen = UnityApplicationGenerator(state_dir)
+
+    app_gen.push_to_ghcr()
+
+    return app_gen
+
 def notebook_parameters(state_directory, **kwargs):
 
     state_dir = check_state_directory(state_directory_path(state_directory))

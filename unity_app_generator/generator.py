@@ -6,6 +6,7 @@ from glob import glob
 
 from .state import ApplicationState
 from .ecr_helper import ECRHelper
+from .ghcr_helper import GHCRHelper
 
 from app_pack_generator import GitManager, DockerUtil, ApplicationNotebook
 from app_pack_generator import ProcessCWL, DataStagingCWL, Descriptor
@@ -75,6 +76,16 @@ class UnityApplicationGenerator(object):
 
         # Log in to ECR via Docker
         registry_url = ecr_helper.docker_login()
+
+        # Push docker image into ECR
+        self.push_to_docker_registry(registry_url)
+
+    def push_to_ghcr(self):
+
+        ghcr_helper = GHCRHelper(self.docker_util)
+
+        # Log in to GHCR via Docker
+        registry_url = ghcr_helper.docker_login()
 
         # Push docker image into ECR
         self.push_to_docker_registry(registry_url)
@@ -166,7 +177,7 @@ step:
 
         if self.app_state.cwl_output_path is None or not os.path.exists(self.app_state.cwl_output_path):
             raise ApplicationGenerationError("Can not register into application registry before CWL generation step")
-
+        
         app_catalog = DockstoreAppCatalog(dockstore_api_url, dockstore_token) 
 
         app_name = self.repo_info.name
