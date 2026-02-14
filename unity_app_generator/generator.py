@@ -116,16 +116,12 @@ class UnityApplicationGenerator(object):
         logger.info("Parameters:\n" + app.parameter_summary())
             
         # Create CWL files depending on the mode of production
-        cwl_generators = [ ProcessCWL(app) ]
+        cwl_generators = [ ProcessCWL(app, self.repo_info) ]
 
         files_created = []
         for cwl_gen in cwl_generators:
             files_created += cwl_gen.generate_all(cwl_output_path, dockerurl=docker_url)
         
-        # Add the JSON descriptor file
-        desc = Descriptor(app, self.repo_info)
-        files_created.append(desc.generate_descriptor(cwl_output_path, docker_url))
-
     def notebook_parameters(self):
 
         notebook_filename = os.path.join(self.repo_info.directory, "process.ipynb")
