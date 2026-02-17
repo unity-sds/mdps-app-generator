@@ -16,7 +16,7 @@
 import logging
 from argparse import ArgumentParser
 
-from unity_app_generator.generator import ApplicationGenerationError
+from mdps_app_generator.generator import ApplicationGenerationError
 
 from . import interface
 

@@ -29,10 +29,10 @@ dynamic = ["dependencies", "version"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
-version = {attr = "unity_app_generator.version.__version__"}
+version = {attr = "mdps_app_generator.version.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["."]
 
 [project.scripts]
-build_ogc_app = "unity_app_generator.__main__:main"
+build_ogc_app = "mdps_app_generator.__main__:main"

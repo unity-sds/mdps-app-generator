@@ -7,12 +7,12 @@ DEFAULT_STATE_DIRECTORY = ".unity_app_gen"
 import os
 import logging
 
-from unity_app_generator.generator import UnityApplicationGenerator, ApplicationGenerationError
+from mdps_app_generator.generator import UnityApplicationGenerator, ApplicationGenerationError
 
 logger = logging.getLogger()
 
 # Defaulty name of place where application generation state data is kept
-DEFAULT_STATE_DIRECTORY = ".unity_app_gen"
+DEFAULT_STATE_DIRECTORY = ".mdps_app_gen"
 
 def state_directory_path(state_directory=None, destination_directory=None):
     "Resolve a path to the state directory based on which arguments are provided"
