@@ -4,12 +4,15 @@ import tempfile
 import logging
 from glob import glob
 
+from ap_validator.app_package import AppPackage
+import json
+
 from .state import ApplicationState
 from .ecr_helper import ECRHelper
 from .ghcr_helper import GHCRHelper
 
 from app_pack_generator import GitManager, DockerUtil, ApplicationNotebook
-from app_pack_generator import ProcessCWL, DataStagingCWL, Descriptor
+from app_pack_generator import ProcessCWL
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +41,8 @@ class UnityApplicationGenerator(object):
                                       use_namespace=image_namespace,
                                       use_repository=image_repository,
                                       use_tag=image_tag)
+
+        self.cwl_files_created = []
 
     def _localize_source(self, source, dest, checkout):
 
@@ -118,10 +123,31 @@ class UnityApplicationGenerator(object):
         # Create CWL files depending on the mode of production
         cwl_generators = [ ProcessCWL(app, self.repo_info) ]
 
-        files_created = []
+        self.cwl_files_created = []
         for cwl_gen in cwl_generators:
-            files_created += cwl_gen.generate_all(cwl_output_path, dockerurl=docker_url)
+            self.cwl_files_created += cwl_gen.generate_all(cwl_output_path, dockerurl=docker_url)
         
+        return self.cwl_files_created
+
+    def verify_cwl(self):
+
+        for cwl_filename in self.cwl_files_created:
+            logger.info(f"Verifying compliance of {cwl_filename} with OGC Best Practices")
+            ap = AppPackage.from_url(cwl_filename)
+
+            result = ap.check_all()
+
+            issues = result["issues"]
+            valid = result["valid"]
+
+            for issue in issues:
+                logger.error("{0}: {1}".format(issue["type"].upper(), issue["message"]))
+
+            if valid:
+                logger.info("CWL is compliant with the OGC's Best Practices for Earth Observation Application Packages")
+            else:
+                raise ApplicationGenerationError("CWL is NOT compliant with the OGC's Best Practices for Earth Observation Application Packages")
+
     def notebook_parameters(self):
 
         notebook_filename = os.path.join(self.repo_info.directory, "process.ipynb")
@@ -132,9 +158,3 @@ class UnityApplicationGenerator(object):
         params_str += nb.parameter_summary()
 
         return params_str
-
-    def _find_existing_app(self, app_catalog, app_name):
-
-        for app_info in app_catalog.application_list(for_user=True):
-            if app_info.dockstore_info['mode'] and app_info.name == app_name:
-                return app_info

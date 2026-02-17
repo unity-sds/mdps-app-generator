@@ -101,5 +101,6 @@ def build_cwl(state_directory, cwl_output_path=None, image_url=None, **kwargs):
     app_gen = UnityApplicationGenerator(state_dir)
 
     app_gen.create_cwl(cwl_output_path=cwl_output_path, docker_url=image_url)
+    app_gen.verify_cwl()
 
     return app_gen
