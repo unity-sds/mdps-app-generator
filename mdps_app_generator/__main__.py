@@ -84,6 +84,13 @@ def main():
 
     parser_push_ecr.set_defaults(func=interface.push_ecr)
 
+    # push_ghcr
+
+    parser_push_ghcr = subparsers.add_parser('push_ghcr',
+        help=f"Push a Docker image from the initialized application directory to Github Container Registry")
+
+    parser_push_ghcr.set_defaults(func=interface.push_ghcr)
+
     # notebook_parameters
 
     parser_parameters = subparsers.add_parser('parameters',
