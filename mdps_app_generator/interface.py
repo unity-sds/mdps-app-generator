@@ -95,6 +95,17 @@ def notebook_parameters(state_directory, **kwargs):
 
     return app_gen
 
+def notebook_metadata(state_directory, **kwargs):
+
+    state_dir = check_state_directory(state_directory_path(state_directory))
+
+    app_gen = UnityApplicationGenerator(state_dir)
+
+    print()
+    print(app_gen.notebook_metadata())
+
+    return app_gen
+
 def build_cwl(state_directory, cwl_output_path=None, image_url=None, **kwargs):
     state_dir = check_state_directory(state_directory_path(state_directory))
 

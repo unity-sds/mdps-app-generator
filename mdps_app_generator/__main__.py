@@ -91,13 +91,6 @@ def main():
 
     parser_push_ghcr.set_defaults(func=interface.push_ghcr)
 
-    # notebook_parameters
-
-    parser_parameters = subparsers.add_parser('parameters',
-        help=f"Display parsed notebook parameters")
-
-    parser_parameters.set_defaults(func=interface.notebook_parameters)
-
     # build_cwl
 
     parser_build_cwl = subparsers.add_parser('build_cwl',
@@ -110,6 +103,20 @@ def main():
         help="Docker image tag or remote registry URL to be included in the generated CWL files if not using the build_docker and/or push_docker subcommands") 
 
     parser_build_cwl.set_defaults(func=interface.build_cwl)
+
+    # notebook_parameters
+
+    parser_parameters = subparsers.add_parser('parameters',
+        help=f"Display parsed notebook parameters")
+
+    parser_parameters.set_defaults(func=interface.notebook_parameters)
+
+    # notebook_metadata
+
+    parser_parameters = subparsers.add_parser('metadata',
+        help=f"Display parsed notebook metadata")
+
+    parser_parameters.set_defaults(func=interface.notebook_metadata)
 
     # Process arguments
 

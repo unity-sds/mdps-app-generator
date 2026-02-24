@@ -158,3 +158,14 @@ class UnityApplicationGenerator(object):
         params_str += nb.parameter_summary()
 
         return params_str
+
+    def notebook_metadata(self):
+
+        notebook_filename = os.path.join(self.repo_info.directory, "process.ipynb")
+
+        nb = ApplicationNotebook(notebook_filename)
+
+        metadata_str = "Parsed Notebook Metadata:\n"
+        metadata_str += nb.metadata_summary()
+
+        return metadata_str
