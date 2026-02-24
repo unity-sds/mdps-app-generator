@@ -60,7 +60,7 @@ def main():
         help="Docker image repository to use instead of the automatically generated one from the Git repository name.")
 
     parser_build_docker.add_argument("-t", "--image_tag", 
-        help="Docker image tag to use instead of the automatically generated one from the Git commit id")
+        help="Docker image tag to use instead of the automatically generated one from either version metadata within the notebook or failing that the Git commit id")
 
     parser_build_docker.add_argument("-c", "--config_file",
         help="JSON or Python Traitlets style config file for repo2docker. Use 'repo2docker --help-all' to see configurable options.")
