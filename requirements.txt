@@ -1,3 +1,3 @@
 boto3
-ogc_ipynb_app_gen>=1.2.0
+ogc_ipynb_app_gen>=1.2.1
 ogc_ap_validator
