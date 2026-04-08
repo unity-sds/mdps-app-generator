@@ -7,7 +7,7 @@ name = "mdps_app_generator"
 authors = [ 
     { name = "James McDuffie" },
 ]
-description="Generates an OGC compliant Unity application package using the Unity app-pack-generator."
+description="Generates an OGC compliant Unity application package using the Unity ogc-ipynb-app-gen."
 readme = "README.md"
 keywords = ["unity-sds", "ogc", "packaging", "cwl", "jupyter"]
 license = { text = "Apache License" }

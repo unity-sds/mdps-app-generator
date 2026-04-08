@@ -14,11 +14,11 @@
 
 <!-- Header block for project -->
 
-[app-pack-generator](https://github.com/unity-sds/app-pack-generator) | [unity-example-application](https://github.com/unity-sds/unity-example-application)
+[ogc-ipynb-app-gen](https://github.com/unity-sds/ogc-ipynb-app-gen) | [unity-example-application](https://github.com/unity-sds/unity-example-application)
 
 ## Features
 
-* Uses [app-pack-generator](https://github.com/unity-sds/app-pack-generator) to create CWL, application descriptor and Docker image
+* Uses [ogc-ipynb-app-gen](https://github.com/unity-sds/ogc-ipynb-app-gen) to create CWL, application descriptor and Docker image
 * Can output Jupyter noteboook parameterization for debugging purposes
 * Pushes generated Docker image to a Docker registry
 * Pushes generated application package files to a Dockstore application registry
@@ -26,7 +26,7 @@
 
 ## Requirements
 
-* [app-pack-generator](https://pypi.org/project/app-pack-generator/)
+* [ogc-ipynb-app-gen](https://pypi.org/project/ogc-ipynb-app-gen/)
 * [Unity-py](https://pypi.org/project/unity-sds-client/)
 
 ## Setup Instructions
@@ -101,7 +101,7 @@ cd unity-example-application
 
 ### build_docker
 
-The `build_docker` command does not require any additional arguments. It will utilize [app-pack-generator](https://github.com/unity-sds/app-pack-generator) and [repo2docker](https://github.com/jupyterhub/repo2docker), please see the documentation there for how to set up your repository for a successful build. The built Docker image name will be stored into `app_state.json` file in the state directory. This command requires the `init` step to have already been run.
+The `build_docker` command does not require any additional arguments. It will utilize [ogc-ipynb-app-gen](https://github.com/unity-sds/ogc-ipynb-app-gen) and [repo2docker](https://github.com/jupyterhub/repo2docker), please see the documentation there for how to set up your repository for a successful build. The built Docker image name will be stored into `app_state.json` file in the state directory. This command requires the `init` step to have already been run.
 
 ### push_docker
 
@@ -109,7 +109,7 @@ This command will push a Docker image built by the `build_docker` step to a remo
 
 ### build_cwl
 
-The `build_cwl` will use [app-pack-generator](https://github.com/unity-sds/app-pack-generator) to create OGC compliant CWL files based on the parameterization of the Jupyter notebook in the target repository. Currently the Jupyter notebook is required to be named `process.ipynb`. Please see the [app-pack-generator](https://github.com/unity-sds/app-pack-generator) documentation for how to properly parameterize a notebook. The generated CWL files and application descriptor will be placed in the state directory. If the `push_docker ` step has not yet been run the CWL files will refer to the local Docker image tag instead a remote URL.
+The `build_cwl` will use [ogc-ipynb-app-gen](https://github.com/unity-sds/ogc-ipynb-app-gen) to create OGC compliant CWL files based on the parameterization of the Jupyter notebook in the target repository. Currently the Jupyter notebook is required to be named `process.ipynb`. Please see the [ogc-ipynb-app-gen](https://github.com/unity-sds/ogc-ipynb-app-gen) documentation for how to properly parameterize a notebook. The generated CWL files and application descriptor will be placed in the state directory. If the `push_docker ` step has not yet been run the CWL files will refer to the local Docker image tag instead a remote URL.
 
 ### push_app_registry
 
@@ -132,7 +132,7 @@ The API URL can be obtained from the Dockstore user interface by scrolling to th
 
 See our [CHANGELOG.md](CHANGELOG.md) for a history of our changes.
 
-See our [releases page](https://github.com/unity-sds/unity-app-generator/releases) for our key versioned releases.
+See our [releases page](https://github.com/unity-sds/mdps-app-generator/releases) for our key versioned releases.
 
 ## License
 
