@@ -1,2 +1,3 @@
 boto3
-app_pack_generator>=1.1.0
+app_pack_generator>=1.2.0
+ogc_ap_validator

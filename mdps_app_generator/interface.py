@@ -7,12 +7,12 @@ DEFAULT_STATE_DIRECTORY = ".unity_app_gen"
 import os
 import logging
 
-from unity_app_generator.generator import UnityApplicationGenerator, ApplicationGenerationError
+from mdps_app_generator.generator import UnityApplicationGenerator, ApplicationGenerationError
 
 logger = logging.getLogger()
 
 # Defaulty name of place where application generation state data is kept
-DEFAULT_STATE_DIRECTORY = ".unity_app_gen"
+DEFAULT_STATE_DIRECTORY = ".mdps_app_gen"
 
 def state_directory_path(state_directory=None, destination_directory=None):
     "Resolve a path to the state directory based on which arguments are provided"
@@ -95,11 +95,23 @@ def notebook_parameters(state_directory, **kwargs):
 
     return app_gen
 
+def notebook_metadata(state_directory, **kwargs):
+
+    state_dir = check_state_directory(state_directory_path(state_directory))
+
+    app_gen = UnityApplicationGenerator(state_dir)
+
+    print()
+    print(app_gen.notebook_metadata())
+
+    return app_gen
+
 def build_cwl(state_directory, cwl_output_path=None, image_url=None, **kwargs):
     state_dir = check_state_directory(state_directory_path(state_directory))
 
     app_gen = UnityApplicationGenerator(state_dir)
 
     app_gen.create_cwl(cwl_output_path=cwl_output_path, docker_url=image_url)
+    app_gen.verify_cwl()
 
     return app_gen

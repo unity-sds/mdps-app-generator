@@ -16,7 +16,7 @@
 import logging
 from argparse import ArgumentParser
 
-from unity_app_generator.generator import ApplicationGenerationError
+from mdps_app_generator.generator import ApplicationGenerationError
 
 from . import interface
 
@@ -60,7 +60,7 @@ def main():
         help="Docker image repository to use instead of the automatically generated one from the Git repository name.")
 
     parser_build_docker.add_argument("-t", "--image_tag", 
-        help="Docker image tag to use instead of the automatically generated one from the Git commit id")
+        help="Docker image tag to use instead of the automatically generated one from either version metadata within the notebook or failing that the Git commit id")
 
     parser_build_docker.add_argument("-c", "--config_file",
         help="JSON or Python Traitlets style config file for repo2docker. Use 'repo2docker --help-all' to see configurable options.")
@@ -84,12 +84,12 @@ def main():
 
     parser_push_ecr.set_defaults(func=interface.push_ecr)
 
-    # notebook_parameters
+    # push_ghcr
 
-    parser_parameters = subparsers.add_parser('parameters',
-        help=f"Display parsed notebook parameters")
+    parser_push_ghcr = subparsers.add_parser('push_ghcr',
+        help=f"Push a Docker image from the initialized application directory to Github Container Registry")
 
-    parser_parameters.set_defaults(func=interface.notebook_parameters)
+    parser_push_ghcr.set_defaults(func=interface.push_ghcr)
 
     # build_cwl
 
@@ -103,6 +103,20 @@ def main():
         help="Docker image tag or remote registry URL to be included in the generated CWL files if not using the build_docker and/or push_docker subcommands") 
 
     parser_build_cwl.set_defaults(func=interface.build_cwl)
+
+    # notebook_parameters
+
+    parser_parameters = subparsers.add_parser('parameters',
+        help=f"Display parsed notebook parameters")
+
+    parser_parameters.set_defaults(func=interface.notebook_parameters)
+
+    # notebook_metadata
+
+    parser_parameters = subparsers.add_parser('metadata',
+        help=f"Display parsed notebook metadata")
+
+    parser_parameters.set_defaults(func=interface.notebook_metadata)
 
     # Process arguments
 
