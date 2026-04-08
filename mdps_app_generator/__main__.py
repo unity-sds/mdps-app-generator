@@ -5,7 +5,7 @@
 # Builds an OGC compliant appplication using the Unity application interface.
 # A Papermill parameterized Jupyter notebook is introspected to determine
 # input and output paramters that are connected through CWL. This software uses
-# the app-pack-generator as well as Unity.py.
+# the ogc-ipynb-app-gen as well as Unity.py.
 #
 # This software performs the following steps:
 # * Builds a Docker image using repo2docker 

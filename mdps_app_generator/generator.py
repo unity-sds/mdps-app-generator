@@ -11,8 +11,8 @@ from .state import ApplicationState
 from .ecr_helper import ECRHelper
 from .ghcr_helper import GHCRHelper
 
-from app_pack_generator import GitManager, DockerUtil, ApplicationNotebook
-from app_pack_generator import ProcessCWL
+from ogc_ipynb_app_gen import GitManager, DockerUtil, ApplicationNotebook
+from ogc_ipynb_app_gen import ProcessCWL
 
 logger = logging.getLogger(__name__)
 
